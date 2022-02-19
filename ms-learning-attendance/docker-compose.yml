@@ -1,0 +1,11 @@
+version: "3.4"
+
+services:
+  redis:
+    container_name: redis
+    image: redis
+    environment:
+      - INITIAL_PORT=6379
+      - IP=0.0.0.0
+    ports:
+      - "6379-6399:6379-6399"
