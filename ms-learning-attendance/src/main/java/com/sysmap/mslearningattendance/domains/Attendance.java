@@ -21,4 +21,5 @@ public class Attendance implements Serializable {
     private UUID courseId;
     private LocalDateTime classDate;
     private boolean attendanceStatus;
+    //teste
 }
