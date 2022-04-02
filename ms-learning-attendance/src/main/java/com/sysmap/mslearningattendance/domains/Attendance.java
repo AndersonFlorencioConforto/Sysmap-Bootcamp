@@ -22,4 +22,5 @@ public class Attendance implements Serializable {
     private LocalDateTime classDate;
     private boolean attendanceStatus;
     //teste
+    //teste2
 }
