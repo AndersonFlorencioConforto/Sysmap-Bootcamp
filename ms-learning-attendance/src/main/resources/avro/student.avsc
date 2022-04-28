@@ -1,0 +1,19 @@
+{
+  "name": "Student",
+  "type": "record",
+  "namespace": "com.acme.avro",
+  "fields": [
+    {
+      "name": "studentId",
+      "type": "string"
+    },
+    {
+      "name": "fullName",
+      "type": "string"
+    },
+    {
+      "name": "courseId",
+      "type": "string"
+    }
+  ]
+}

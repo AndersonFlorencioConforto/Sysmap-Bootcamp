@@ -4,6 +4,7 @@ import com.sysmap.mslearningcad.controllers.inputDtos.InputStudentDTO;
 import com.sysmap.mslearningcad.domains.Student;
 import com.sysmap.mslearningcad.services.client.CourseFeignClient;
 import com.sysmap.mslearningcad.services.exceptions.CourseNotFoundException;
+import com.sysmap.mslearningcad.services.resultDtos.KafkaEventStudentDTO;
 import com.sysmap.mslearningcad.services.resultDtos.ResultCourseDTO;
 import feign.FeignException;
 import org.springframework.http.ResponseEntity;
@@ -42,5 +43,12 @@ public class StudentMapper {
         } catch (FeignException e) {
             throw new CourseNotFoundException("Curso não encontrado");
         }
+    }
+
+    public com.acme.avro.Student builderAvro(KafkaEventStudentDTO eventStudentDTO) {
+        return com.acme.avro.Student.newBuilder().setStudentId(eventStudentDTO.getStudentId().toString())
+                .setCourseId(eventStudentDTO.getCourseId().toString())
+                .setFullName(eventStudentDTO.getFullName())
+                .build();
     }
 }

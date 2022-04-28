@@ -1,6 +1,10 @@
 package com.sysmap.mslearningcad.configs;
 
+import java.io.Serializable;
 import java.util.HashMap;
+
+import com.acme.avro.Student;
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -14,6 +18,8 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
+import static io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG;
+
 @Configuration
 public class KafkaConfig {
 
@@ -21,17 +27,18 @@ public class KafkaConfig {
     private KafkaProperties kafkaProperties;
 
     @Bean
-    public ProducerFactory<String, String> producerFactory() {
+    public ProducerFactory<String, Student> producerFactory() {
         var configs = new HashMap<String, Object>();
         configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
         configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+        configs.put(SCHEMA_REGISTRY_URL_CONFIG,"http://127.0.0.1:8081");
         return new DefaultKafkaProducerFactory<>(configs);
     }
 
 
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
+    public KafkaTemplate<String, Student> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 
@@ -46,7 +53,7 @@ public class KafkaConfig {
     @Bean
     public KafkaAdmin.NewTopics topics() {
         return new KafkaAdmin.NewTopics(
-                TopicBuilder.name("topic-student").partitions(1).replicas(1).build()
+                TopicBuilder.name("topic-student").partitions(2).replicas(1).build()
         );
 
     }
