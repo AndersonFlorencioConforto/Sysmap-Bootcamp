@@ -20,7 +20,7 @@ import org.springframework.kafka.core.ProducerFactory;
 
 import static io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG;
 
-@Configuration
+//@Configuration
 public class KafkaConfig {
 
 //    @Autowired
@@ -42,19 +42,19 @@ public class KafkaConfig {
 //        return new KafkaTemplate<>(producerFactory());
 //    }
 //
-    @Bean
-    public KafkaAdmin kafkaAdmin() {
-        var configs = new HashMap<String, Object>();
-        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "http://localhost:29092");
-        return new KafkaAdmin(configs);
-    }
-
-    //2.7
-    @Bean
-    public KafkaAdmin.NewTopics topics() {
-        return new KafkaAdmin.NewTopics(
-                TopicBuilder.name("topic-student").partitions(5).build()
-        );
-
-    }
+//    @Bean
+//    public KafkaAdmin kafkaAdmin() {
+//        var configs = new HashMap<String, Object>();
+//        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "http://localhost:9092");
+//        return new KafkaAdmin(configs);
+//    }
+//
+//    //2.7
+//    @Bean
+//    public KafkaAdmin.NewTopics topics() {
+//        return new KafkaAdmin.NewTopics(
+//                TopicBuilder.name("topic-student").partitions(5).build()
+//        );
+//
+//    }
 }

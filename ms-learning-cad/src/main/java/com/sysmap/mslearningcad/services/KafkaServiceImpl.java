@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class KafkaServiceImpl implements KafkaService {
 
-//    @Value("${topic.name.producer.student}")
-//    private String value;
+    @Value("${topic.name.producer}")
+    private String value;
 
     private final KafkaTemplate<String, Student> kafkaTemplate;
     private final StudentMapper studentMapper;
@@ -27,7 +27,7 @@ public class KafkaServiceImpl implements KafkaService {
     @Override
     public void eventStudent(KafkaEventStudentDTO eventStudentDTO) {
         Student student = studentMapper.builderAvro(eventStudentDTO);
-        kafkaTemplate.send("topic-student",student);
-        log.info("{}",student);
+        kafkaTemplate.send(value, student);
+        log.info("{}", student);
     }
 }
