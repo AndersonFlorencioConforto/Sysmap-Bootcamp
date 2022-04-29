@@ -1,49 +1,58 @@
-version: '3'
+version: "3.4"
 
 services:
   zookeeper:
     container_name: zookeeper
-    image: confluentinc/cp-zookeeper:latest
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+    image: confluentinc/cp-zookeeper
     ports:
-      - 22181:2181
+      - "2181:2181"
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
 
   kafka:
     container_name: kafka
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka
+    ports:
+      - "9092:9092"
     depends_on:
       - zookeeper
-    ports:
-      - 29092:29092
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
-      MAX_BLOCK_MS_CONFIG: 30000
+      KAFKA_NUM_PARTITIONS: 3
+      CONFLUENT_SUPPORT_METRICS_ENABLE: 0
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379-6399:6379-6399"
+    environment:
+      - INITIAL_PORT=6379
+      - IP=0.0.0.0
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27017:27017"
 
   schemaregistry:
-      image: confluentinc/cp-schema-registry:5.1.2
-      restart: always
-      depends_on:
-        - zookeeper
-      environment:
-        SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zookeeper:2181"
-        SCHEMA_REGISTRY_HOST_NAME: schemaregistry
-        SCHEMA_REGISTRY_LISTENERS: "http://localhost:8081"
-        KAFKA_SCHEMA_REGISTRY_URL: "schemaregistry:8081"
-        SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS: GET,POST,PUT,OPTIONS
-        SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN: '*'
-      ports:
-        - 8081:8081
-
-  mongodb_container:
-    container_name: mongo_db_container
-    image: mongo:latest
+    image: confluentinc/cp-schema-registry:5.1.2
+    restart: always
+    depends_on:
+      - zookeeper
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zookeeper:2181"
+      SCHEMA_REGISTRY_HOST_NAME: schemaregistry
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+      KAFKA_SCHEMA_REGISTRY_URL: "schemaregistry:8081"
+      SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS: GET,POST,PUT,OPTIONS
+      SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN: '*'
     ports:
-      - 27017:27017
+      - 8081:8081
