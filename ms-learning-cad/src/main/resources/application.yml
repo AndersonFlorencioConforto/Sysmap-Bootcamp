@@ -1,0 +1,31 @@
+server:
+  port: '8080'
+course-url: localhost:8085/api/v1
+spring:
+  application:
+    name: ms-learning-cad
+    kafka:
+      bootstrap-servers: localhost:29092
+      properties:
+        security:
+          protocol: SASL_SSL
+          sasl:
+            mechanism: SCRAM-SHA-256
+        auto:
+          register:
+            schemas: true
+        schema:
+          registry:
+            url: 127.0.0.1:8081
+      producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/ms-learning-cad
+  kafka:
+    template:
+      default-topic:
+
+
+

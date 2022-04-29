@@ -4,12 +4,16 @@ import com.acme.avro.Student;
 import com.sysmap.mslearningcad.mapper.StudentMapper;
 import com.sysmap.mslearningcad.services.resultDtos.KafkaEventStudentDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 public class KafkaServiceImpl implements KafkaService {
+
+//    @Value("${topic.name.producer.student}")
+//    private String value;
 
     private final KafkaTemplate<String, Student> kafkaTemplate;
     private final StudentMapper studentMapper;

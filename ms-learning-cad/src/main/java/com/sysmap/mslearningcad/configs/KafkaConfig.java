@@ -23,29 +23,29 @@ import static io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig.SCHE
 @Configuration
 public class KafkaConfig {
 
-    @Autowired
-    private KafkaProperties kafkaProperties;
-
-    @Bean
-    public ProducerFactory<String, Student> producerFactory() {
-        var configs = new HashMap<String, Object>();
-        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
-        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
-        configs.put(SCHEMA_REGISTRY_URL_CONFIG,"http://127.0.0.1:8081");
-        return new DefaultKafkaProducerFactory<>(configs);
-    }
-
-
-    @Bean
-    public KafkaTemplate<String, Student> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
-    }
-
+//    @Autowired
+//    private KafkaProperties kafkaProperties;
+//
+//    @Bean
+//    public ProducerFactory<String, Student> producerFactory() {
+//        var configs = new HashMap<String, Object>();
+//        configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
+//        configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+//        configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+//        configs.put(SCHEMA_REGISTRY_URL_CONFIG,"http://127.0.0.1:8081");
+//        return new DefaultKafkaProducerFactory<>(configs);
+//    }
+//
+//
+//    @Bean
+//    public KafkaTemplate<String, Student> kafkaTemplate() {
+//        return new KafkaTemplate<>(producerFactory());
+//    }
+//
     @Bean
     public KafkaAdmin kafkaAdmin() {
         var configs = new HashMap<String, Object>();
-        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
+        configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "http://localhost:29092");
         return new KafkaAdmin(configs);
     }
 
@@ -53,7 +53,7 @@ public class KafkaConfig {
     @Bean
     public KafkaAdmin.NewTopics topics() {
         return new KafkaAdmin.NewTopics(
-                TopicBuilder.name("topic-student").partitions(2).replicas(1).build()
+                TopicBuilder.name("topic-student").partitions(5).build()
         );
 
     }
