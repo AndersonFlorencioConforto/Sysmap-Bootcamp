@@ -1,0 +1,33 @@
+server:
+  port: '8083'
+student-url: localhost:8080/api/v1
+
+kafka:
+  topic: topic-student
+spring:
+  application:
+    name: ms-learning-attendance
+  cache:
+    type: redis
+    redis:
+      host: localhost
+      port: '6379'
+  kafka:
+    properties:
+      bootstrap-servers: localhost:9092
+      schema:
+        registry:
+          url: http://127.0.0.1:8081
+    consumer:
+      group-id: group-1
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true
+
+
+
+
+
+

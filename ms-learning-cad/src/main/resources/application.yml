@@ -11,15 +11,6 @@ spring:
     producer:
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value:
-        converter: io.confluent.connect.avro.AvroConverter
-        schema:
-          registry:
-            url: http://127.0.0.1:8081
-        enhanced:
-          avro:
-            schema:
-              support: true
       group-id: topic-student
       bootstrap-servers: localhost:9092
     properties:
